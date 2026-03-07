@@ -3,11 +3,13 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./components/Root/Root.jsx";
-import About from "./components/About/About.jsx";
+
 import ErrorPage from "./components/ErrorPage/ErrorPage.jsx";
 import Home from "./components/Home/Home.jsx";
 
 import { HelmetProvider } from "react-helmet-async";
+import Login from "./components/Login/Login.jsx";
+import Register from "./components/Register/Register.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,8 +22,12 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/about",
-        element: <About />,
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
       },
     ],
   },

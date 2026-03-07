@@ -1,15 +1,15 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 
-const About = () => {
+const Login = () => {
   return (
     <div>
       <Helmet>
-        <title>About</title>
+        <title>Login</title>
       </Helmet>
-      <h1>About</h1>
+      <h2>Please Login</h2>
     </div>
   );
 };
 
-export default About;
+export default Login;
