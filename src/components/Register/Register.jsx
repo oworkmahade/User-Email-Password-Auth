@@ -2,12 +2,15 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import auth from "../firebase/firebase.config";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
   //  state declaration for showing error message
   const [registerError, setRegisterError] = useState("");
   //   state declaration for showing success message
   const [registerSuccess, setRegisterSuccess] = useState("");
+  //   state declaration for showing password
+  const [showPassword, setShowPassword] = useState(false);
 
   // handle register
   const handleRegister = (e) => {
@@ -19,6 +22,18 @@ const Register = () => {
 
     if (password.length < 6) {
       setRegisterError("Password must be at least 6 characters long.");
+      return;
+    } else if (!/[A-Z]/.test(password)) {
+      setRegisterError("Password must contain at least one uppercase letter.");
+      return;
+    } else if (!/[a-z]/.test(password)) {
+      setRegisterError("Password must contain at least one lowercase letter.");
+      return;
+    } else if (!/\d/.test(password)) {
+      setRegisterError("Password must contain at least one number.");
+      return;
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      setRegisterError("Password must contain at least one special character.");
       return;
     }
 
@@ -52,16 +67,31 @@ const Register = () => {
         <input
           type="email"
           name="email"
+          placeholder="email"
+          id="email"
           className="w-full p-2 mt-1 border rounded"
           required
         />
 
         <label className="mt-3">Password</label>
-        <input
-          type="password"
-          name="password"
-          className="w-full p-2 mt-1 border rounded"
-        />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="password"
+            id="password"
+            className="w-full p-2 pr-10 mt-1 border rounded"
+            required
+          />
+
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute p-0 text-gray-600 border-none cursor-pointer right-3 top-3 bg-none"
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
+        </div>
 
         <input
           type="submit"
