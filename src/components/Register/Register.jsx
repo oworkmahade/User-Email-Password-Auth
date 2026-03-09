@@ -22,7 +22,6 @@ const Register = () => {
     console.log(email, password, termsChecked);
 
     // password validation
-
     if (password.length < 6) {
       setRegisterError("Password must be at least 6 characters long.");
       return;
@@ -43,7 +42,7 @@ const Register = () => {
       return;
     }
 
-    // create user with email and password
+    //  createUserWithEmailAndPassword
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
         console.log(result.user);
@@ -69,7 +68,7 @@ const Register = () => {
         onSubmit={handleRegister}
         className="w-1/3 p-4 mx-auto mt-6 border rounded"
       >
-        <label>Email</label>
+        <label htmlFor="email">Email</label>
         <input
           type="email"
           name="email"
@@ -79,7 +78,9 @@ const Register = () => {
           required
         />
 
-        <label className="mt-3">Password</label>
+        <label htmlFor="password" className="mt-3">
+          Password
+        </label>
         <div className="relative">
           <input
             type={showPassword ? "text" : "password"}
@@ -100,23 +101,18 @@ const Register = () => {
         </div>
 
         {/* terms and conditions */}
-        <div className="flex flex-row items-center py-2 m-2">
+        <div className="flex flex-row items-center gap-2 py-2 m-2 text-md">
           <input type="checkbox" name="terms" id="terms" />
-          <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
+          <label className="text-gray-600 text-md" htmlFor="terms">
             I agree to the{" "}
-            <button
-              type="button"
-              className="text-blue-500 border-none cursor-pointer bg-none"
-            >
-              terms and conditions
-            </button>
+            <a className="link link-hover">terms and conditions</a>
           </label>
         </div>
 
         <input
           type="submit"
           value="Register"
-          className="w-full p-2 mt-4 text-white transition bg-green-500 rounded hover:bg-green-600"
+          className="w-full p-2 mt-4 text-white transition bg-green-500 rounded hover:bg-gray-600"
         />
       </form>
 
