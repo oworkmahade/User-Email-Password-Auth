@@ -33,7 +33,18 @@ const Login = () => {
     }
 
     // signInWithEmailAndPassword
-    signInWithEmailAndPassword(auth, email, password).then().catch();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((result) => {
+        console.log(result.user);
+        setLoginSuccess("User logged in successfully.");
+        e.target.reset(" ");
+        setLoginError(" "); // hide error message after successful login
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoginError(error.message);
+        setLoginSuccess(""); // hide success message if there's an error
+      });
   };
 
   return (
@@ -42,7 +53,6 @@ const Login = () => {
         <title>Login</title>
       </Helmet>
       {/* form-login  */}
-
       <form
         onSubmit={handleLogin}
         className="w-1/3 p-4 mx-auto mt-6 border rounded"
@@ -75,13 +85,20 @@ const Login = () => {
         <div className="my-4">
           <a className="link link-hover">Forgot password?</a>
         </div>
-        <button className="w-full p-2 mt-4 text-white transition bg-gray-600 rounded hover:bg-green-600">
+        <button className="w-full p-2 mt-4 text-white transition bg-green-500 rounded hover:bg-gray-600">
           Login
         </button>
+
+        {/* Register  */}
+        <div className="my-4">
+          Register if you don't have an account. {/* Register  */}
+          <a className="link link-hover" href="/register">
+            Register
+          </a>
+        </div>
       </form>
       {/* showing error message in form  */}
       {loginError && <p className="text-red-600">{loginError}</p>}
-
       {/* showing success message in form  */}
       {loginSuccess && <p className="text-green-600">{loginSuccess}</p>}
     </div>

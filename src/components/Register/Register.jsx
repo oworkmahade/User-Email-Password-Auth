@@ -114,6 +114,14 @@ const Register = () => {
           value="Register"
           className="w-full p-2 mt-4 text-white transition bg-green-500 rounded hover:bg-gray-600"
         />
+
+        {/* Login  */}
+        <div className="my-4">
+          Already have an account? {/* Login  */}
+          <a className="link link-hover" href="/login">
+            Login
+          </a>
+        </div>
       </form>
 
       {/* showing error message in form  */}
