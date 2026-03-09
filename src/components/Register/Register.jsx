@@ -17,6 +17,9 @@ const Register = () => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
+    const termsChecked = e.target.terms.checked;
+
+    console.log(email, password, termsChecked);
 
     // password validation
 
@@ -34,6 +37,9 @@ const Register = () => {
       return;
     } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
       setRegisterError("Password must contain at least one special character.");
+      return;
+    } else if (!termsChecked) {
+      setRegisterError("Please agree to the terms and conditions.");
       return;
     }
 
@@ -87,10 +93,24 @@ const Register = () => {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute p-0 text-gray-600 border-none cursor-pointer right-3 top-3 bg-none"
+            className="absolute p-2 text-xl text-gray-600 border-none cursor-pointer right-3 top-2 bg-none"
           >
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </button>
+        </div>
+
+        {/* terms and conditions */}
+        <div className="flex flex-row items-center py-2 m-2">
+          <input type="checkbox" name="terms" id="terms" />
+          <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
+            I agree to the{" "}
+            <button
+              type="button"
+              className="text-blue-500 border-none cursor-pointer bg-none"
+            >
+              terms and conditions
+            </button>
+          </label>
         </div>
 
         <input
