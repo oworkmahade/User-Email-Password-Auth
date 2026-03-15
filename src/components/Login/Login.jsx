@@ -1,20 +1,27 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
+import {
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import auth from "../firebase/firebase.config";
 
 const Login = () => {
+  // state declaration for login error message
   const [loginError, setLoginError] = useState("");
   //   state declaration for showing success message
   const [loginSuccess, setLoginSuccess] = useState("");
+  // emailReference for holding email
+  const emailRef = useRef(null);
+
+  // login functionality starts here
   const handleLogin = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
     console.log(email, password);
 
-    // password validation
-
+    // password validation starts here
     if (password.length < 6) {
       setLoginError("Password must be at least 6 characters long.");
       return;
@@ -31,13 +38,21 @@ const Login = () => {
       setLoginError("Password must contain at least one special character.");
       return;
     }
+    // password validation starts here
 
-    // signInWithEmailAndPassword
+    // login firebase section starts here
     signInWithEmailAndPassword(auth, email, password)
       .then((result) => {
         console.log(result.user);
+        const user = result.user;
+        // email verification check section starts here
+        if (!user.emailVerified) {
+          alert("Please Verify your email address");
+          return;
+        }
+        // email verification check section ends here
         setLoginSuccess("User logged in successfully.");
-        e.target.reset(" ");
+        e.target.reset();
         setLoginError(" "); // hide error message after successful login
       })
       .catch((error) => {
@@ -46,6 +61,45 @@ const Login = () => {
         setLoginSuccess(""); // hide success message if there's an error
       });
   };
+  // login firebase section ends here
+  // login functionality ends here
+
+  /******************************************************************************** */
+
+  // reset password section starts here
+  /******************************************************************************* */
+  // no use of event (e)
+  // out of form control so validation must done newly, catch email value using emailRef.current.value
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const handlePasswordReset = () => {
+    const email = emailRef.current.value;
+
+    if (!email) {
+      setLoginError("Please enter an email address.");
+      return;
+    } else if (!emailRegex.test(email)) {
+      setLoginError("Please enter a valid email address.");
+      return;
+    }
+
+    // for direct testing
+    // else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    //   setLoginError("Please enter a valid email address.");
+    //   return;
+    // }
+
+    //  send reset password email link section starts here
+    /**************************************************************************** */
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        alert("please check your email.");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  /**************************************************************************** */
+  // reset password section ends here
 
   return (
     <div>
@@ -62,6 +116,7 @@ const Login = () => {
         <input
           type="email"
           name="email"
+          ref={emailRef} // reference email
           placeholder="email"
           id="email"
           className="w-full p-2 mt-1 border rounded"
@@ -83,7 +138,14 @@ const Login = () => {
         />
 
         <div className="my-4">
-          <a className="link link-hover">Forgot password?</a>
+          <button
+            type="button"
+            onClick={handlePasswordReset}
+            className="p-0 m-0 bg-transparent border-none cursor-pointer link link-hover"
+            style={{ background: "none", border: "none" }}
+          >
+            Forgot password?
+          </button>
         </div>
         <button className="w-full p-2 mt-4 text-white transition bg-green-500 rounded hover:bg-gray-600">
           Login

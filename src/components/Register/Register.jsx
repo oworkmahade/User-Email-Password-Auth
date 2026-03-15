@@ -1,18 +1,24 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import auth from "../firebase/firebase.config";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
+  /**************************************************************************** */
   //  state declaration for showing error message
   const [registerError, setRegisterError] = useState("");
   //   state declaration for showing success message
   const [registerSuccess, setRegisterSuccess] = useState("");
   //   state declaration for showing password
   const [showPassword, setShowPassword] = useState(false);
+  /**************************************************************************** */
 
-  // handle register
+  // register section starts here
+  /****************************************************************************** */
   const handleRegister = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
@@ -21,7 +27,8 @@ const Register = () => {
 
     console.log(email, password, termsChecked);
 
-    // password validation
+    // password validation section starts here
+    /************************************************************************** */
     if (password.length < 6) {
       setRegisterError("Password must be at least 6 characters long.");
       return;
@@ -41,12 +48,28 @@ const Register = () => {
       setRegisterError("Please agree to the terms and conditions.");
       return;
     }
+    /*************************************************************************** */
+    // password validation section ends here
 
-    //  createUserWithEmailAndPassword
+    //  user registration firebase section starts here
+    /*************************************************************************** */
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
         console.log(result.user);
         setRegisterSuccess("User created successfully.");
+
+        // user verification-email firebase section starts here
+        /********************************************************************** */
+        sendEmailVerification(result.user)
+          .then(() => {
+            alert("Please check your email and verify your account.");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        /********************************************************************* */
+        // user verification-email firebase section ends here
+
         e.target.reset("");
         setRegisterError(""); // hide error message after successful registration
       })
@@ -55,7 +78,10 @@ const Register = () => {
         setRegisterError(error.message);
         setRegisterSuccess(""); // hide success message if there's an error
       });
+    //  user registration firebase section starts here
+    /****************************************************************************** */
   };
+  // register section ends here
 
   return (
     <div>
@@ -105,7 +131,9 @@ const Register = () => {
           <input type="checkbox" name="terms" id="terms" />
           <label className="text-gray-600 text-md" htmlFor="terms">
             I agree to the{" "}
-            <a className="link link-hover">terms and conditions</a>
+            <a className="link link-hover" href="/terms-and-conditions">
+              terms and conditions
+            </a>
           </label>
         </div>
 
