@@ -108,7 +108,7 @@ const Register = () => {
         onSubmit={handleRegister}
         className="w-1/3 p-4 mx-auto mt-6 border rounded"
       >
-        {/* email */}
+        {/* full name */}
         <label htmlFor="name">Full Name</label>
         <input
           type="text"
