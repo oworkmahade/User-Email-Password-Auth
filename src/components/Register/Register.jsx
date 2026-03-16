@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  updateProfile,
 } from "firebase/auth";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -21,11 +22,12 @@ const Register = () => {
   /****************************************************************************** */
   const handleRegister = (e) => {
     e.preventDefault();
+    const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
     const termsChecked = e.target.terms.checked;
 
-    console.log(email, password, termsChecked);
+    console.log(name, email, password, termsChecked);
 
     // password validation section starts here
     /************************************************************************** */
@@ -57,6 +59,18 @@ const Register = () => {
       .then((result) => {
         console.log(result.user);
         setRegisterSuccess("User created successfully.");
+
+        /************************************************************************ */
+        // update profile section starts here
+        updateProfile(result.user, {
+          displayName: name,
+          photoURL: "https://example.com/jane-q-user/profile.jpg",
+        })
+          .then(() => console.log("Profile updated"))
+          .catch((error) => {
+            console.log(error);
+          });
+        // update profile section ends here
 
         // user verification-email firebase section starts here
         /********************************************************************** */
@@ -94,6 +108,17 @@ const Register = () => {
         onSubmit={handleRegister}
         className="w-1/3 p-4 mx-auto mt-6 border rounded"
       >
+        {/* email */}
+        <label htmlFor="name">Full Name</label>
+        <input
+          type="text"
+          name="name"
+          placeholder="full name"
+          id="name"
+          className="w-full p-2 mt-1 border rounded"
+          required
+        />
+        {/* email */}
         <label htmlFor="email">Email</label>
         <input
           type="email"
@@ -103,7 +128,7 @@ const Register = () => {
           className="w-full p-2 mt-1 border rounded"
           required
         />
-
+        {/* password  */}
         <label htmlFor="password" className="mt-3">
           Password
         </label>
@@ -136,14 +161,14 @@ const Register = () => {
             </a>
           </label>
         </div>
-
+        {/* register button  */}
         <input
           type="submit"
           value="Register"
           className="w-full p-2 mt-4 text-white transition bg-green-500 rounded hover:bg-gray-600"
         />
 
-        {/* Login  */}
+        {/* Login link  */}
         <div className="my-4">
           Already have an account? {/* Login  */}
           <a className="link link-hover" href="/login">
